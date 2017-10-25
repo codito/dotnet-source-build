@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))/dir.props" />
-  
+
   <PropertyGroup>
     <RepositoryOrganization>aspnet</RepositoryOrganization>
     <RepositoryBranch>servicing/1.0.x</RepositoryBranch>
     <PackagesOutput>$(ProjectDirectory)artifacts/build/</PackagesOutput>
-    <BuildCommand>$(ProjectDirectory)/build$(ShellExtension) -NoTest /p:Configuration=$(Configuration) $(BuildArguments)</BuildCommand>
-    <CleanCommand>$(ProjectDirectory)/clean$(ShellExtension)</CleanCommand>
+    <BuildArguments>/p:Configuration=$(Configuration)</BuildArguments>
+    <BuildArguments Condition=" '$(OS)' != 'Windows_NT' ">$(BuildArguments) /p:SkipNETFramework=true</BuildArguments>
+    <BuildCommand>$(ProjectDirectory)/build$(ShellExtension) -NoTest $(BuildArguments)</BuildCommand>
+    <CleanCommand>$(ProjectDirectory)/clean$(ShellExtension) $(BuildArguments)</CleanCommand>
   </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.targets))/dir.targets" />
